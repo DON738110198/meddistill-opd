@@ -1,0 +1,31 @@
+[protocol]
+id = "base-anchor-sar-v1"
+implementation_revision = "52c2f1c98fe464e46a89ed02830795027bcb294f"
+seed = 20260812
+base_model = "Qwen/Qwen3.5-4B"
+data_path = "data/pipeline/ceval_sar_train.jsonl"
+manifest_path = "data/pipeline/ceval_sar_manifest.json"
+quarantine_path = "data/pipeline/quarantine_ceval_sar.jsonl"
+source_splits = ["dev", "val"]
+presentation_count = 200
+system_message = "你是中文单项选择题作答助手。请在内部完成必要推理，但最终回答只能包含 A、B、C、D 中的一个大写字母，不要输出推理过程、解释、标点或其他文字。"
+
+[training]
+method = "BASE-SAR"
+screen_steps = 50
+batch_size = 4
+group_size = 4
+enable_thinking = true
+max_completion_tokens = 2048
+max_sequence_tokens = 4096
+temperature = 1.0
+top_p = 1.0
+top_k = -1
+learning_rate = 0.000005
+beta1 = 0.9
+beta2 = 0.95
+loss_fn = "ppo"
+kl_penalty = 1.0
+advantage_clip = 20.0
+state_save_interval = 5
+checkpoint_steps = [0, 1, 10, 25, 50]

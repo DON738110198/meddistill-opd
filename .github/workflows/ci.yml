@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - name: Install Python
+        run: uv python install 3.13
+      - name: Sync environment
+        run: uv sync --extra dev --frozen
+      - name: Lint
+        run: uv run --extra dev ruff check src tests tools
+      - name: Test
+        run: uv run --extra dev pytest -q

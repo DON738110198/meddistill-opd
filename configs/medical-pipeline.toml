@@ -1,0 +1,67 @@
+[protocol]
+id = "medical-opd-sar-v1"
+implementation_revision = "52c2f1c98fe464e46a89ed02830795027bcb294f"
+seed = 20260812
+base_model = "Qwen/Qwen3.5-4B"
+medical_system = "你是一个中文医疗问答助手。请根据题目给出严谨的医学推理和最终答案。"
+medical_train_path = "data/pipeline/train_medical_clean.jsonl"
+general_replay_path = "data/processed/train_general_replay.jsonl"
+
+[medical_sft]
+method = "MED-SFT"
+lora_rank = 32
+batch_size = 16
+epochs = 3
+max_sequence_tokens = 2048
+learning_rate = 0.0001
+beta1 = 0.9
+beta2 = 0.95
+state_save_interval = 25
+checkpoint_steps = [1, 10, 25, 50]
+
+[teacher_gate]
+medical_min_delta_pp = 2.0
+minimum_format_valid_rate = 0.98
+maximum_invalid_increase_pp = 1.0
+
+[medical_opd]
+method = "MED-OPD"
+lora_rank = 16
+screen_steps = 25
+batch_size = 4
+group_size = 4
+enable_thinking = true
+max_completion_tokens = 2048
+max_sequence_tokens = 4096
+temperature = 1.0
+top_p = 1.0
+top_k = -1
+learning_rate = 0.00004
+beta1 = 0.9
+beta2 = 0.95
+loss_fn = "ppo"
+kl_penalty = 1.0
+advantage_clip = 20.0
+state_save_interval = 5
+checkpoint_steps = [1, 10, 25]
+
+[sar]
+method = "BASE-SAR"
+screen_steps = 25
+batch_size = 4
+group_size = 4
+enable_thinking = true
+max_completion_tokens = 2048
+max_sequence_tokens = 4096
+temperature = 1.0
+top_p = 1.0
+top_k = -1
+learning_rate = 0.000005
+beta1 = 0.9
+beta2 = 0.95
+loss_fn = "ppo"
+kl_penalty = 1.0
+advantage_clip = 20.0
+state_save_interval = 5
+checkpoint_steps = [1, 10, 25]
+prompt_source = "alpaca-zh-general-replay"

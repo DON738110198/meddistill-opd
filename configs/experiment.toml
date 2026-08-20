@@ -1,0 +1,113 @@
+[experiment]
+name = "medical-opd-27b-to-4b"
+seed = 20260812
+currency = "CNY"
+
+[models]
+student = "Qwen/Qwen3.5-4B"
+teacher = "Qwen/Qwen3.6-27B"
+lora_rank = 16
+
+[data]
+medical_repo = "FreedomIntelligence/medical-o1-reasoning-SFT"
+medical_config = "zh"
+medical_revision = "fc2c9e8a37b38f38da6d449564a8c350b244aef4"
+medqa_repo = "bigbio/med_qa"
+medqa_config = "med_qa_zh_4options_source"
+medqa_revision = "ddef95d268cdad413693d634279a9a679d468469"
+general_replay_repo = "shibing624/alpaca-zh"
+general_replay_revision = "f39db019a94f8dbea48ab30d2bdc090703284559"
+ceval_repo = "ceval/ceval-exam"
+ceval_labeled_revision = "85ae5586dbc20cac29d0bef4df66c6569b04c1a0"
+ceval_subjects = [
+  "computer_network",
+  "college_programming",
+  "advanced_mathematics",
+  "discrete_mathematics",
+  "college_physics",
+  "logic",
+  "chinese_language_and_literature",
+  "college_economics",
+]
+ceval_proxy_split = "val"
+ceval_full_split = "test"
+proxy_medical_size = 100
+proxy_general_size = 100
+max_optimizer_steps = 300
+medical_per_step = 4
+mixed_medical_per_step = 3
+mixed_general_per_step = 1
+near_duplicate_threshold = 0.85
+
+[training]
+batch_size = 4
+group_size = 1
+learning_rate = 0.00004
+beta1 = 0.9
+beta2 = 0.95
+temperature = 1.0
+top_p = 1.0
+top_k = -1
+default_max_length = 1024
+minimum_max_length = 128
+save_steps = [10, 25, 50, 100, 200, 300]
+opd_loss = "ppo"
+kl_penalty = 1.0
+advantage_clip = 20.0
+medical_system = "You are a careful medical question-answering assistant. Give a rigorous answer based on the question."
+general_system = "You are a helpful general-purpose assistant."
+choice_system = "Answer the single-choice question. Return exactly one uppercase letter: A, B, C, or D."
+
+[medical_teacher_sft]
+protocol_id = "t27-medical-sft-v1"
+batch_size = 4
+lora_rank = 32
+learning_rate = 0.0001
+beta1 = 0.9
+beta2 = 0.95
+max_sequence_tokens = 672
+save_steps = [1, 10, 25]
+medical_system = "你是一个中文医疗问答助手。请根据题目给出严谨的医学推理和最终答案。"
+
+[staged_opd]
+protocol_id = "paired-medical-teacher-sar-v1"
+screen_steps = 25
+batch_size = 4
+group_size = 4
+enable_thinking = true
+max_sequence_tokens = 1024
+max_completion_tokens = 896
+medical_learning_rate = 0.00004
+sar_learning_rate = 0.000005
+sar_prompt_source = "alpaca-zh-general-replay"
+save_steps = [1, 10, 25]
+
+[gates]
+teacher_medical_margin_pp = 2.0
+teacher_overall_margin_pp = 0.0
+max_general_drop_pp = 2.0
+require_finite_loss = true
+
+[evaluation]
+max_completion_tokens = 16
+temperature = 0.01
+top_p = 0.9
+concurrency = 8
+rag_top_k = 3
+thinking_protocol_id = "thinking-fixed-v1"
+thinking_enabled = true
+thinking_medical_max_tokens = 1024
+thinking_general_max_tokens = 8192
+thinking_temperature = 0.01
+thinking_top_p = 0.9
+thinking_seed_per_row = true
+
+[pricing]
+source_url = "https://pytrio.cn/api/model-prices"
+snapshot_date = "2026-07-30"
+student_prefill_cny_per_million = 1.49
+student_sample_cny_per_million = 4.54
+student_train_cny_per_million = 4.54
+teacher_prefill_cny_per_million = 8.41
+teacher_sample_cny_per_million = 25.29
+teacher_train_cny_per_million = 25.29

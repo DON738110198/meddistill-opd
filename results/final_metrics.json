@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "project": "MedDistill-OPD",
+  "generated_from": [
+    "reports/PROJECT_FINAL_SUMMARY.md",
+    "reports/RESULTS.md",
+    "reports/M5_AUDIT.md",
+    "reports/UPSTREAM4B_E2_MEDICAL_OPD_TO300_RESULTS.md"
+  ],
+  "full_official_test": {
+    "scope": "MedQA test (3426) and C-Eval-8 test (1925)",
+    "rows": [
+      {
+        "checkpoint": "4B Base",
+        "medical_accuracy": 71.83,
+        "medical_correct": 2461,
+        "medical_count": 3426,
+        "general_accuracy": 85.45,
+        "general_correct": 1645,
+        "general_count": 1925
+      },
+      {
+        "checkpoint": "Sequence KD@50",
+        "medical_accuracy": 71.31,
+        "medical_correct": 2443,
+        "medical_count": 3426,
+        "general_accuracy": 82.86,
+        "general_correct": 1595,
+        "general_count": 1925
+      },
+      {
+        "checkpoint": "Raw-27B OPD@50",
+        "medical_accuracy": 72.12,
+        "medical_correct": 2471,
+        "medical_count": 3426,
+        "general_accuracy": 84.47,
+        "general_correct": 1626,
+        "general_count": 1925
+      },
+      {
+        "checkpoint": "Raw-27B OPD@200",
+        "medical_accuracy": 68.42,
+        "medical_correct": 2344,
+        "medical_count": 3426,
+        "general_accuracy": null,
+        "general_correct": null,
+        "general_count": null
+      }
+    ]
+  },
+  "teacher_adaptation_screen": {
+    "scope": "Separate MedQA-dev100 screen after 100 Medical-O1 training presentations",
+    "rows": [
+      {
+        "checkpoint": "Raw 27B",
+        "medical_accuracy": 92.0,
+        "format_valid_rate": 100.0,
+        "thinking_closed_rate": 68.0,
+        "truncation_rate": 32.0,
+        "mean_output_tokens": 881.05
+      },
+      {
+        "checkpoint": "27B Medical SFT@25",
+        "medical_accuracy": 81.0,
+        "format_valid_rate": 92.0,
+        "thinking_closed_rate": 85.0,
+        "truncation_rate": 15.0,
+        "mean_output_tokens": 451.47
+      }
+    ]
+  },
+  "medical_sft_screen": {
+    "scope": "MedQA-dev100 and C-Eval-val100 checkpoint screen",
+    "rows": [
+      {"checkpoint": "4B Base", "medical_accuracy": 74.0, "general_accuracy": 79.0},
+      {"checkpoint": "SFT epoch 1", "medical_accuracy": 77.0, "general_accuracy": 63.0},
+      {"checkpoint": "SFT epoch 2", "medical_accuracy": 82.0, "general_accuracy": 64.0},
+      {"checkpoint": "SFT epoch 3", "medical_accuracy": 78.0, "general_accuracy": 61.0}
+    ]
+  },
+  "medical_opd_diagnostic": {
+    "scope": "Fixed MedQA-zh600 and row-disjoint C-Eval300 protocol diagnostic",
+    "warning": "The C-Eval300 protocol is not an untouched official test split.",
+    "rows": [
+      {"step": 0, "checkpoint": "4B Base", "medical_accuracy": 74.50, "general_accuracy": 82.00, "medical_truncation": 42.67, "general_truncation": 11.00},
+      {"step": 50, "checkpoint": "Medical OPD@50", "medical_accuracy": 81.17, "general_accuracy": 70.33, "medical_truncation": 1.67, "general_truncation": 14.00},
+      {"step": 100, "checkpoint": "Medical OPD@100", "medical_accuracy": 82.50, "general_accuracy": 71.67, "medical_truncation": 0.50, "general_truncation": 7.33},
+      {"step": 150, "checkpoint": "Medical OPD@150", "medical_accuracy": 82.17, "general_accuracy": 70.67, "medical_truncation": 0.00, "general_truncation": 6.67},
+      {"step": 200, "checkpoint": "Medical OPD@200", "medical_accuracy": 81.50, "general_accuracy": 70.00, "medical_truncation": 0.00, "general_truncation": 4.00},
+      {"step": 250, "checkpoint": "Medical OPD@250", "medical_accuracy": 80.00, "general_accuracy": 71.33, "medical_truncation": 0.17, "general_truncation": 4.33},
+      {"step": 300, "checkpoint": "Medical OPD@300", "medical_accuracy": 80.33, "general_accuracy": 71.33, "medical_truncation": 0.00, "general_truncation": 2.33}
+    ]
+  },
+  "sar_diagnostic": {
+    "scope": "SAR from Medical OPD@300 on the fixed MedQA-zh600/C-Eval300 protocol diagnostic",
+    "warning": "Step 100 is the best observed trade-off, selected after inspecting the trajectory.",
+    "rows": [
+      {"step": 0, "checkpoint": "Medical OPD@300", "medical_accuracy": 80.33, "general_accuracy": 71.33, "medical_truncation": 0.00, "general_truncation": 2.33, "medical_mean_output_tokens": 181.93},
+      {"step": 50, "checkpoint": "SAR@50", "medical_accuracy": 83.33, "general_accuracy": 74.00, "medical_truncation": 5.33, "general_truncation": 16.00, "medical_mean_output_tokens": null},
+      {"step": 100, "checkpoint": "SAR@100", "medical_accuracy": 85.00, "general_accuracy": 80.33, "medical_truncation": 8.33, "general_truncation": 17.00, "medical_mean_output_tokens": 424.0},
+      {"step": 150, "checkpoint": "SAR@150", "medical_accuracy": 76.83, "general_accuracy": null, "medical_truncation": 32.50, "general_truncation": null, "medical_mean_output_tokens": null},
+      {"step": 200, "checkpoint": "SAR@200", "medical_accuracy": 73.83, "general_accuracy": 82.67, "medical_truncation": 40.50, "general_truncation": 7.00, "medical_mean_output_tokens": null},
+      {"step": 250, "checkpoint": "SAR@250", "medical_accuracy": 72.67, "general_accuracy": 83.00, "medical_truncation": 40.00, "general_truncation": 7.00, "medical_mean_output_tokens": null},
+      {"step": 300, "checkpoint": "SAR@300", "medical_accuracy": 75.00, "general_accuracy": 81.67, "medical_truncation": 41.67, "general_truncation": 8.00, "medical_mean_output_tokens": 825.0}
+    ]
+  }
+}
