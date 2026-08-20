@@ -61,7 +61,7 @@ flowchart LR
 `prompt + student completion` 计算 token log-probability：
 
 $$
-r_t^{KL}=\log \pi_\theta(y_t\mid x,y_{<t})-\log \pi_T(y_t\mid x,y_{<t}),
+r_t^{KL}=\log \pi_\theta(y_t\mid x,y_{1:t-1})-\log \pi_T(y_t\mid x,y_{1:t-1}),
 \qquad A_t=-\beta r_t^{KL}.
 $$
 
